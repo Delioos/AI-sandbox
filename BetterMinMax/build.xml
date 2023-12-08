@@ -1,0 +1,117 @@
+<project name="Mon super projet" default="build" basedir=".">
+
+  <description>
+    Fichier de compilation de mon super projet 
+  </description>
+
+  <!-- Propriétés globales pour ce fichier -->
+  
+  <property name="source.dir"   location="src"/>
+  <property name="build.dir"    location="bin"/>
+  <property name="dist.dir"     location="dist"/>
+  <property name="doc.dir"      location="doc"/>
+  <property name="depcache.dir" location=".depcache"/>
+
+  <!-- Compilation de tout
+       (ajouter le nom des cibles dans depends) -->
+  
+  <target name="build"
+	  depends="dist, doc"
+	  description="Compilation de tout" /> 
+
+  <!-- création des répertoires de compilation  -->
+
+  <target name="init" description="Création des répertoires du projet">
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${dist.dir}"/>
+    <mkdir dir="${doc.dir}"/>
+    <mkdir dir="${depcache.dir}"/>
+  </target>
+
+  <!-- Nettoyage rapide -->
+  
+  <target name="clean" description="Nettoyage">
+    <delete>
+      <fileset defaultexcludes="no" dir="${source.dir}"
+	       includes="**/*~, **/*.class"/>
+    </delete>
+  </target>
+
+  <!-- Nettoyage complet -->
+
+  <target name="cleanall" depends="clean" description="Nettoyage">
+    <delete dir="${build.dir}"/>
+    <delete dir="${dist.dir}"/>
+    <delete dir="${doc.dir}"/>
+    <delete dir="${depcache.dir}"/>
+  </target>
+  
+  <!-- Compilation -->
+  
+  <target name="TreeSearch" depends="init" description="Compilation de TreeSearch">
+    <depend srcdir="${source.dir}"
+            destdir="${build.dir}"
+            cache="${depcache.dir}"
+            closure="yes"/>
+    <javac srcdir="${source.dir}"
+	       destdir="${build.dir}"
+	       includeantruntime="false">
+      <include name="LancerRecherche.java"/>
+    </javac>
+   
+  </target>
+  
+  <target name="Games" depends="init" description="Compilation de games">
+    <depend srcdir="${source.dir}"
+            destdir="${build.dir}"
+            cache="${depcache.dir}"
+            closure="yes"/>
+    <javac srcdir="${source.dir}"
+	       destdir="${build.dir}"
+	       includeantruntime="false">
+      <include name="LancerJeux.java"/>
+    </javac>
+  </target>
+    
+  <!-- Fabrication des JAR -->
+
+  <target name="dist"
+          depends="TreeSearchDist, GamesDist"
+          description="Fabrication des Jar"/>
+     
+  <target name="TreeSearchDist"
+          depends="TreeSearch"
+          description="Jar de TreeSearch">
+    <jar destfile="${dist.dir}/TreeSearch.jar" basedir="${build.dir}">
+      <manifest>
+        <attribute name="Main-Class" value="LancerRecherche"/>
+      </manifest>
+    </jar>
+  </target>
+
+<target name="GamesDist"
+          depends="Games"
+          description="Jar de Games">
+    <jar destfile="${dist.dir}/Games.jar" basedir="${build.dir}">
+      <manifest>
+        <attribute name="Main-Class" value="LancerJeux"/>
+      </manifest>
+    </jar>
+  </target>
+
+  
+  <!-- Generation javadoc  -->
+  
+  <target name="doc" depends="init" description="Génération de la doc">
+    <javadoc packagenames="ia.*"
+             sourcepath="${source.dir}"
+             destdir="${doc.dir}"
+             additionalparam="-Xdoclint:none -quiet">
+      <fileset dir="${source.dir}">
+        <include name="*/*"/>
+      </fileset>
+    </javadoc>
+    
+  </target>
+  
+</project>
