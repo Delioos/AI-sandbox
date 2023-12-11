@@ -32,10 +32,10 @@ public class KNN extends AlgoClassification {
         for (int i = 0; i < k; i++) {
             knn[i] = this.donnees[i];
         }
-        for (int i = 0; i < this.donnees.length; i++) {
+        for (int i = 0; i < this.donnees.length - 1; i++) {
             Imagette plusGrand = knn[0];
             int indexPlusGrand = 0;
-            for (int j = 0; j < k; j++) {
+            for (int j = 0; j < k ; j++) {
                 if (knn[j].distanceImagette(image) > plusGrand.distanceImagette(image)) {
                     plusGrand = knn[j];
                     indexPlusGrand = j;

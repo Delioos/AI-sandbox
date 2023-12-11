@@ -6,7 +6,7 @@ public class Imagette {
 
     int[][] pixels;
     int valeur;
-    private String path = "./files/images/";
+    private String path = "ressources/images/";
 
     public Imagette(int[][] pixels, int valeur) {
         this.pixels = pixels;
@@ -39,7 +39,7 @@ public class Imagette {
                     image.setRGB(col, ligne, rgb);
                 }
             }
-            File outputfile = new File("./files/images/" + System.currentTimeMillis() + ".png");
+            File outputfile = new File("ressources/images/" + System.currentTimeMillis() + ".png");
             ImageIO.write(image, "png", outputfile);
         } catch (Exception e) {
             e.printStackTrace();

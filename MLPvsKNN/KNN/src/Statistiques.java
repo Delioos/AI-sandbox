@@ -10,6 +10,7 @@ public class Statistiques {
 
     /**
      * methode getPourcentageCorrect
+     *
      * @return double
      */
     public double getPourcentageCorrect() {
@@ -17,16 +18,18 @@ public class Statistiques {
         int nbIncorrect = 0;
 
         for (Imagette image : this.donneesTest) {
-            System.out.println("====================================");
-            System.out.println("image : " + image.getValeur() + " prédiction : " + algo.predictImage(image));
-            System.out.println("------------------------------------");
-            if (image.getValeur() == algo.predictImage(image)) {
-                nbCorrect++;
-            } else {
-                nbIncorrect++;
+            if (image != null) {
+                System.out.println("====================================");
+                System.out.println("image : " + image.getValeur() + " prédiction : " + algo.predictImage(image));
+                System.out.println("------------------------------------");
+                if (image.getValeur() == algo.predictImage(image)) {
+                    nbCorrect++;
+                } else {
+                    nbIncorrect++;
+                }
             }
         }
 
-        return (double) (nbCorrect / (1.0 * (nbCorrect + nbIncorrect)))*100;
+        return (double) (nbCorrect / (1.0 * (nbCorrect + nbIncorrect))) * 100;
     }
 }
