@@ -26,7 +26,7 @@ public class ListeImage {
             System.out.println("nbLignes: " + nbLignes);
             System.out.println("nbColonnes: " + nbColonnes);
 
-            for (int i = 0; i < nbValue; i++) {
+            for (int i = 0; i < nbValue - 1; i++) {
                 int[][] pixels = new int[nbLignes][nbColonnes];
                 for (int j = 0; j < nbLignes; j++) {
                     for (int k = 0; k < nbColonnes; k++) {
