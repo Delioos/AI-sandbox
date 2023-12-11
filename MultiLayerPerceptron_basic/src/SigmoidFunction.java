@@ -7,7 +7,6 @@ class SigmoidFunction implements TransferFunction {
 
     @Override
     public double evaluateDer(double value) {
-        double sigmoid = evaluate(value);
-        return sigmoid * (1 - sigmoid);
+        return value * (1 - value);
     }
 }

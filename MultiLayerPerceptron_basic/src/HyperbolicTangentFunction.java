@@ -6,7 +6,6 @@ class HyperbolicTangentFunction implements TransferFunction {
 
     @Override
     public double evaluateDer(double value) {
-        double tanh = evaluate(value);
-        return 1 - tanh * tanh;
+        return 1 - value * value;
     }
 }
