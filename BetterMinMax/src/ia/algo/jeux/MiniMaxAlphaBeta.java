@@ -12,6 +12,10 @@ public class MiniMaxAlphaBeta extends Player {
     private static final int INFINITY = Integer.MAX_VALUE;
     private static final int MINUS_INFINITY = Integer.MIN_VALUE;
 
+    public static final int MAX_DEPTH = 5;
+
+    public static int nb_noeuds = 0;
+
     /**
      * Represente un joueur
      *
@@ -24,23 +28,29 @@ public class MiniMaxAlphaBeta extends Player {
 
     @Override
     public Action getMove(GameState state) {
+        this.nb_noeuds = 0;
+        Action action = null;
         if (player == PLAYER1) {
-            return MaxValeur(state, MINUS_INFINITY, INFINITY).getAction();
+            action = (Action) MaxValeur(state, MINUS_INFINITY, INFINITY, MAX_DEPTH).getAction();
         } else {
-            return MinValeur(state, MINUS_INFINITY, INFINITY).getAction();
+            action = (Action) MinValeur(state, MINUS_INFINITY, INFINITY, MAX_DEPTH).getAction();
         }
+        System.out.println("Nombre de noeuds : " + this.nb_noeuds);
+        return action;
     }
 
-    private ActionValuePair MaxValeur(GameState state, int alpha, int beta) {
-        if (this.game.endOfGame(state)) {
-            return new ActionValuePair(null, state.getGameValue());
+    private ActionValuePair MaxValeur(GameState state, int alpha, int beta, int depth) {
+        this.nb_noeuds++;
+        double points = state.getHeuristicValue();
+        if (this.game.endOfGame(state) || depth == 0) {
+            return new ActionValuePair(null, points);
         }
         int vmax = Integer.MIN_VALUE;
         Action cmax = null;
 
         for (Action action : this.game.getActions(state)) {
             GameState S_suivant = (GameState) this.game.doAction(state, action);
-            ActionValuePair v = MinValeur(S_suivant, alpha, beta);
+            ActionValuePair v = MinValeur(S_suivant, alpha, beta, depth - 1);
             if (v.getValue() > vmax) {
                 vmax = (int) v.getValue();
                 cmax = action;
@@ -62,16 +72,18 @@ public class MiniMaxAlphaBeta extends Player {
         return new ActionValuePair(cmax, vmax);
     }
 
-    private ActionValuePair MinValeur(GameState state, int alpha, int beta) {
-        if (this.game.endOfGame(state)) {
-            return new ActionValuePair(null, state.getGameValue());
+    private ActionValuePair MinValeur(GameState state, int alpha, int beta, int depth) {
+        this.nb_noeuds++;
+        double points = state.getHeuristicValue();
+        if (this.game.endOfGame(state) || depth == 0) {
+            return new ActionValuePair(null, points);
         }
         int vmin = Integer.MAX_VALUE;
         Action cmin = null;
 
         for (Action action : this.game.getActions(state)) {
             GameState S_suivant = (GameState) this.game.doAction(state, action);
-            ActionValuePair v = MaxValeur(S_suivant, alpha, beta);
+            ActionValuePair v = MaxValeur(S_suivant, alpha, beta, depth - 1);
             if (v.getValue() < vmin) {
                 vmin = (int) v.getValue();
                 cmin = action;

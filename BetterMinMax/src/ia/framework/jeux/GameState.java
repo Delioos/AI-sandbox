@@ -45,4 +45,6 @@ public abstract class GameState extends State {
         return game_value==other.getGameValue() &&
             player_to_move==other.getPlayerToMove();
     }
+
+    public abstract double getHeuristicValue();
 }
