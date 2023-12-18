@@ -38,7 +38,7 @@ public class ListeImage {
                 int label = dis_label.readUnsignedByte();
                 Imagette imagette = new Imagette(pixels, label);
                 this.listeImage[i] = imagette;
-                System.out.println("ajout de l'imagette " + i);
+                System.out.print("Progression: " + ((i * 100) / (nbValue - 1)) + "%\r");
             }
 
             // on enregistre une imagette aléatoire

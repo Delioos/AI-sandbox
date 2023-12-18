@@ -31,13 +31,10 @@ public class MainMLP {
         // TODO
         double [][] trainingInputs =  listeImage.getMLPFormatedInputs();
         double [][] trainingOutputs = listeImage.getMLPFormatedOutputs();
-        for (int i = 0; i < trainingOutputs.length; i++) {
-            System.out.println(i + " input: "+ trainingInputs[i] + " value: " + trainingOutputs[i]);
-        }
-
+        
         // Entraînement
         int maxEpochs = 1000000; // Nombre maximal de passages des exemples
-        double targetError = 0.05; // Erreur cible
+        double targetError = 0.01; // Erreur cible
         HashMap<Integer, Double> errorsForExemple = new HashMap<>();
         int epoch = 1;
         double totalError = 1;
@@ -46,24 +43,12 @@ public class MainMLP {
             double[] input = trainingInputs[randomIndex];
             double[] output = new double[10];
 
-//            System.out.println(trainingInputs.length);
-//            System.out.println(listeImage.listeImage.length);
-//
-//            System.out.println("randomIndex: " + randomIndex);
-//            System.out.println(listeImage.listeImage[randomIndex].valeur);
-
-            System.out.println("epoch ------> " + epoch);
-
-
             int indexGoodValue = listeImage.listeImage[randomIndex].valeur;
             output[indexGoodValue] = 1;
 
-            System.out.println(indexGoodValue);
-            System.out.println(Arrays.toString(output));
 
             double error = mlp.backPropagate(input, output);
             errorsForExemple.put(randomIndex, error);
-            System.out.println("error: " + error);
             boolean allErrorsAreUnderTarget = true;
             for (double e : errorsForExemple.values()) {
                 if (e > targetError) {
@@ -76,7 +61,7 @@ public class MainMLP {
                 System.out.println("Target error reached at epoch: " + epoch);
                 break;
             } else {
-                System.out.println("Epoch: " + epoch + ", Error: " + (totalError/epoch));
+                System.out.print("Epoch: " + epoch + ", Error: " + (totalError / (epoch + 1)) + "\r");
             }
             totalError += error;
             epoch++;
@@ -100,7 +85,7 @@ public class MainMLP {
                 nbFailed++;
             }
         }
-        System.out.println("Failed: " + nbFailed + "/" + trainingInputs.length);
+        System.out.println("Failed: " + nbFailed + "/" + trainingInputs.length + "\r");
 
 
 
@@ -112,7 +97,7 @@ public class MainMLP {
         for (int i = 0; i < testInputs.length; i++) {
             double input = testInputs[i];
             double predictedOutput = mlp.execute(input);
-            System.out.println("Input: " + Double.toString(input) + ", Predicted Output: " + Double.toString(predictedOutput));
+            System.out.println'("Input: " + Double.toString(input) + ", Predicted Output: " + Double.toString(predictedOutput));
         }*
 
          */
