@@ -1,8 +1,7 @@
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
-public class Main {
+public class MainMLP {
     public static void main(String[] args) {
         // Configurer le MLP
         int[] layers = {2, 2, 1}; // Exemple avec une couche d'entrée de 2 neurones, une couche cachée de 2 neurones et une couche de sortie de 1 neurone
@@ -14,9 +13,24 @@ public class Main {
 
         MLP mlp = new MLP(layers, learningRate, activationFunction);
 
-        // Exemple de données d'apprentissage pour la table ET
+        /*
+        // Exemple de données d'apprentissage pour la table XOR
         double[][] trainingInputs = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
         double[][] trainingOutputs = {{0}, {1}, {1}, {0}};
+
+         */
+        int nbImages = 10000;
+        if (args.length > 0) {
+            nbImages = Integer.parseInt(args[0]);
+        }
+        ListeImage listeImage = new ListeImage("ressources/MNIST/t10k-labels.idx1-ubyte", "ressources/MNIST/t10k-images.idx3-ubyte", nbImages);
+
+        // TODO
+        double [][] trainingInputs =  listeImage.getMLPFormatedInputs();
+        double [][] trainingOutputs = listeImage.getMLPFormatedOutputs();
+        for (int i = 0; i < trainingOutputs.length; i++) {
+            System.out.println(i + " input: "+ trainingInputs[i] + " value: " + trainingOutputs[i]);
+        }
 
         // Entraînement
         int maxEpochs = 10000; // Nombre maximal de passages des exemples
@@ -52,13 +66,20 @@ public class Main {
             System.out.println("Input: " + Arrays.toString(input) + ", Predicted Output: " + Arrays.toString(predictedOutput));
         }
 
+
+
+
+        /*
         // Tester sur d'autres exemples
         System.out.println("Testing on additional examples:");
-        double[][] testInputs = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
+        double[] testInputs = // TODO
         for (int i = 0; i < testInputs.length; i++) {
-            double[] input = testInputs[i];
-            double[] predictedOutput = mlp.execute(input);
-            System.out.println("Input: " + Arrays.toString(input) + ", Predicted Output: " + Arrays.toString(predictedOutput));
-        }
+            double input = testInputs[i];
+            double predictedOutput = mlp.execute(input);
+            System.out.println("Input: " + Double.toString(input) + ", Predicted Output: " + Double.toString(predictedOutput));
+        }*
+
+         */
+
     }
 }
