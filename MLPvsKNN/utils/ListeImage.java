@@ -1,5 +1,6 @@
 import java.io.DataInputStream;
 import java.io.FileInputStream;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class ListeImage {
@@ -35,7 +36,6 @@ public class ListeImage {
                 }
 
                 int label = dis_label.readUnsignedByte();
-
                 Imagette imagette = new Imagette(pixels, label);
                 this.listeImage[i] = imagette;
                 System.out.println("ajout de l'imagette " + i);
@@ -59,4 +59,32 @@ public class ListeImage {
         return listeImage;
     }
 
+    /**
+     * méthode permettant de recuperer les images sous forme de tableau de double
+     * @return
+     */
+    public double[][] getMLPFormatedInputs() {
+        double [][] res = new double[this.listeImage.length][784];
+        for (int i = 0; i < this.listeImage.length - 1; i++) {
+            int[][] pixels = this.listeImage[i].getPixels();
+            int index = 0;
+            for (int j = 0; j < pixels.length - 1; j++) {
+                for (int k = 0; k < pixels[0].length - 1; k++) {
+                    res[i][index] = pixels[j][k] / 255.0; // Normalisation des valeurs de pixels entre 0 et 1
+                    index++;
+                }
+            }
+        }
+        return res;
+    }
+
+
+    public double[][] getMLPFormatedOutputs() {
+        double [][] res = new double[this.listeImage.length][1];
+        for (int i = 0; i < this.listeImage.length - 1; i++) {
+            res[i][0] = this.listeImage[i].getValeur();
+            System.out.println("valeur de l'image "+i+" : "+res[i][0]);
+        }
+        return res;
+    }
 }
