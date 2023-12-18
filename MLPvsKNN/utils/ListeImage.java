@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class ListeImage {
 
-    Imagette[] listeImage;
+    public Imagette[] listeImage;
 
     private static int nbValue = 60000;
 

@@ -4,11 +4,16 @@ import java.util.HashMap;
 public class MainMLP {
     public static void main(String[] args) {
         // Configurer le MLP
-        int[] layers = {2, 2, 1}; // Exemple avec une couche d'entrée de 2 neurones, une couche cachée de 2 neurones et une couche de sortie de 1 neurone
-        double learningRate = 0.001;
+        int nbImages = 10000;
+        ListeImage listeImage = new ListeImage("ressources/MNIST/t10k-labels.idx1-ubyte", "ressources/MNIST/t10k-images.idx3-ubyte", nbImages);
+
+        int pixels = listeImage.listeImage[0].getPixels().length * listeImage.listeImage[0].getPixels()[0].length;
+
+        int[] layers = {pixels, 150, 100, 10}; // Exemple avec une couche d'entrée de 2 neurones, une couche cachée de 2 neurones et une couche de sortie de 1 neurone
+        double learningRate = 0.6;
 
         // Choisissez la fonction d'activation (Sigmoïde ou Tangente Hyperbolique)
-        HyperbolicTangentFunction activationFunction = new HyperbolicTangentFunction();
+        SigmoidFunction activationFunction = new SigmoidFunction();
         // TransferFunction activationFunction = new HyperbolicTangentFunction();
 
         MLP mlp = new MLP(layers, learningRate, activationFunction);
@@ -19,11 +24,9 @@ public class MainMLP {
         double[][] trainingOutputs = {{0}, {1}, {1}, {0}};
 
          */
-        int nbImages = 10000;
         if (args.length > 0) {
             nbImages = Integer.parseInt(args[0]);
         }
-        ListeImage listeImage = new ListeImage("ressources/MNIST/t10k-labels.idx1-ubyte", "ressources/MNIST/t10k-images.idx3-ubyte", nbImages);
 
         // TODO
         double [][] trainingInputs =  listeImage.getMLPFormatedInputs();
@@ -33,13 +36,31 @@ public class MainMLP {
         }
 
         // Entraînement
-        int maxEpochs = 10000; // Nombre maximal de passages des exemples
-        double targetError = 0.01; // Erreur cible
+        int maxEpochs = 1000000; // Nombre maximal de passages des exemples
+        double targetError = 0.05; // Erreur cible
         HashMap<Integer, Double> errorsForExemple = new HashMap<>();
-        for (int i = 0; i < maxEpochs; i++) {
-            int randomIndex = (int) (Math.random() * trainingInputs.length);
+        int epoch = 1;
+        double totalError = 1;
+        while (epoch < maxEpochs && (totalError/epoch) > targetError) {
+            int randomIndex = (int) (Math.random() * (trainingInputs.length - 2));
             double[] input = trainingInputs[randomIndex];
-            double[] output = trainingOutputs[randomIndex];
+            double[] output = new double[10];
+
+//            System.out.println(trainingInputs.length);
+//            System.out.println(listeImage.listeImage.length);
+//
+//            System.out.println("randomIndex: " + randomIndex);
+//            System.out.println(listeImage.listeImage[randomIndex].valeur);
+
+            System.out.println("epoch ------> " + epoch);
+
+
+            int indexGoodValue = listeImage.listeImage[randomIndex].valeur;
+            output[indexGoodValue] = 1;
+
+            System.out.println(indexGoodValue);
+            System.out.println(Arrays.toString(output));
+
             double error = mlp.backPropagate(input, output);
             errorsForExemple.put(randomIndex, error);
             System.out.println("error: " + error);
@@ -50,23 +71,36 @@ public class MainMLP {
                     break;
                 }
             }
-            System.out.println(errorsForExemple.values());
+            //  System.out.println(errorsForExemple.values());
             if (allErrorsAreUnderTarget) {
-                System.out.println("Target error reached at epoch: " + i);
+                System.out.println("Target error reached at epoch: " + epoch);
                 break;
             } else {
-                System.out.println("Epoch: " + i + ", Error: " + error);
+                System.out.println("Epoch: " + epoch + ", Error: " + (totalError/epoch));
             }
+            totalError += error;
+            epoch++;
         }
 
         // Tester sur les exemples après l'apprentissage
+        int nbFailed = 0;
         System.out.println("Testing on training examples:");
-        for (int i = 0; i < trainingInputs.length; i++) {
+        for (int i = 0; i < trainingInputs.length-1; i++) {
             double[] input = trainingInputs[i];
             double[] predictedOutput = mlp.execute(input);
-            //System.out.println("Input: " + Arrays.toString(input) + ", Predicted Output: " + Arrays.toString(predictedOutput));
-            System.out.println("Predicted Output: " + Arrays.toString(predictedOutput));
+            // on récup la valeur de l'index la plus grande
+            int indexMax = 0;
+            for (int j = 0; j < predictedOutput.length; j++) {
+                if (predictedOutput[j] > predictedOutput[indexMax]) {
+                    indexMax = j;
+                }
+            }
+            System.out.println("Attendu: " + listeImage.listeImage[i].valeur + ", Prédit: " + indexMax);
+            if (listeImage.listeImage[i].valeur != indexMax) {
+                nbFailed++;
+            }
         }
+        System.out.println("Failed: " + nbFailed + "/" + trainingInputs.length);
 
 
 
