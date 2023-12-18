@@ -64,13 +64,12 @@ public class ListeImage {
      * @return
      */
     public double[][] getMLPFormatedInputs() {
-        int totalPixels = this.listeImage.length * 28 * 28;
-        double [][] res = new double[this.listeImage.length][totalPixels];
+        double [][] res = new double[this.listeImage.length][784];
         for (int i = 0; i < this.listeImage.length - 1; i++) {
             int[][] pixels = this.listeImage[i].getPixels();
             int index = 0;
-            for (int j = 0; j < pixels.length; j++) {
-                for (int k = 0; k < pixels[0].length; k++) {
+            for (int j = 0; j < pixels.length - 1; j++) {
+                for (int k = 0; k < pixels[0].length - 1; k++) {
                     res[i][index] = pixels[j][k] / 255.0; // Normalisation des valeurs de pixels entre 0 et 1
                     index++;
                 }
@@ -84,7 +83,7 @@ public class ListeImage {
         double [][] res = new double[this.listeImage.length][1];
         for (int i = 0; i < this.listeImage.length - 1; i++) {
             res[i][0] = this.listeImage[i].getValeur();
-            System.out.println("erreur : "+res[i][0]+" "+this.listeImage[i].getValeur());
+            System.out.println("valeur de l'image "+i+" : "+res[i][0]);
         }
         return res;
     }

@@ -5,7 +5,7 @@ public class MainMLP {
     public static void main(String[] args) {
         // Configurer le MLP
         int[] layers = {2, 2, 1}; // Exemple avec une couche d'entrée de 2 neurones, une couche cachée de 2 neurones et une couche de sortie de 1 neurone
-        double learningRate = 0.6;
+        double learningRate = 0.001;
 
         // Choisissez la fonction d'activation (Sigmoïde ou Tangente Hyperbolique)
         HyperbolicTangentFunction activationFunction = new HyperbolicTangentFunction();
@@ -42,6 +42,7 @@ public class MainMLP {
             double[] output = trainingOutputs[randomIndex];
             double error = mlp.backPropagate(input, output);
             errorsForExemple.put(randomIndex, error);
+            System.out.println("error: " + error);
             boolean allErrorsAreUnderTarget = true;
             for (double e : errorsForExemple.values()) {
                 if (e > targetError) {
@@ -63,7 +64,8 @@ public class MainMLP {
         for (int i = 0; i < trainingInputs.length; i++) {
             double[] input = trainingInputs[i];
             double[] predictedOutput = mlp.execute(input);
-            System.out.println("Input: " + Arrays.toString(input) + ", Predicted Output: " + Arrays.toString(predictedOutput));
+            //System.out.println("Input: " + Arrays.toString(input) + ", Predicted Output: " + Arrays.toString(predictedOutput));
+            System.out.println("Predicted Output: " + Arrays.toString(predictedOutput));
         }
 
 
