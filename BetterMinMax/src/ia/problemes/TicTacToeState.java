@@ -66,7 +66,12 @@ public class TicTacToeState extends GameState {
             super.equalsState(o);
 	}
 
-    public int hashState() {
+	@Override
+	public double getHeuristicValue() {
+		return 0;
+	}
+
+	public int hashState() {
         int result = 31 * Arrays.hashCode(board);
         result = 31 * result + Integer.hashCode(player_to_move);
         result = 31 * result + Double.hashCode(game_value);
