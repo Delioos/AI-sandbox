@@ -2,13 +2,13 @@ package ia.algo.jeux;
 
 import ia.framework.common.Action;
 import ia.framework.common.ActionValuePair;
+import ia.framework.common.State;
 import ia.framework.jeux.Game;
 import ia.framework.jeux.GameState;
 import ia.framework.jeux.Player;
 
-import static ia.framework.jeux.Player.PLAYER1;
-
 public class MinMax extends Player {
+
 
     /**
      * Represente un joueur
@@ -23,46 +23,56 @@ public class MinMax extends Player {
     @Override
     public Action getMove(GameState state) {
         if (player == PLAYER1) {
-            return MaxValeur(state).getAction();
+            return MaxValue(state).getAction();
         } else {
-            return MinValeur(state).getAction();
+            return MinValue(state).getAction();
         }
     }
 
-    private ActionValuePair MaxValeur(GameState state) {
+    public ActionValuePair MaxValue(GameState state) {
+        // si c'est la fin de la partie on retourne une action null
         if (this.game.endOfGame(state)) {
             return new ActionValuePair(null, state.getGameValue());
         }
-        int V_max = Integer.MIN_VALUE;
-        Action C_max = null;
 
+        double vmax = Integer.MIN_VALUE;
+        // on initialise vmax à -infini
+        // on initialise cmax à null
+        // cmax correspond au coup qui mène à vmax
+        Action cmax = null;
+        // pour chaque action possible
         for (Action action : this.game.getActions(state)) {
-            GameState S_suivant = (GameState) this.game.doAction(state, action);
-            ActionValuePair v = MinValeur(S_suivant);
-            if (v.getValue() > V_max) {
-                V_max = (int) v.getValue();
-                C_max = action;
+            GameState ssuivant = (GameState) this.game.doAction(state, action);
+            // on récupère l'état suivant
+            ActionValuePair v = MinValue(ssuivant);
+            if (v.getValue() > vmax) {
+                vmax = (int) v.getValue();
+                cmax = action;
             }
         }
-        return new ActionValuePair(C_max, V_max);
+        // on récupère l'état suivant
+        return new ActionValuePair(cmax, vmax);
     }
 
-    private ActionValuePair MinValeur(GameState state) {
+    private ActionValuePair MinValue(GameState state) {
         if (this.game.endOfGame(state)) {
             return new ActionValuePair(null, state.getGameValue());
         }
-        int V_min = Integer.MAX_VALUE;
-        Action C_min = null;
 
+        double vmin = Integer.MAX_VALUE;
+        // on initialise vmin à +infini
+        // on initialise cmin à null
+        Action cmin = null;
         for (Action action : this.game.getActions(state)) {
-            GameState S_suivant = (GameState) this.game.doAction(state, action);
-            ActionValuePair v = MaxValeur(S_suivant);
-            if (v.getValue() < V_min) {
-                V_min = (int) v.getValue();
-                C_min = action;
+            GameState ssuivant = (GameState) this.game.doAction(state, action);
+            // on récupère l'état suivant
+            ActionValuePair v = MaxValue(ssuivant);
+            if (v.getValue() < vmin) {
+                vmin = (int) v.getValue();
+                cmin = action;
             }
         }
-        return new ActionValuePair(C_min, V_min);
-    }
 
+        return new ActionValuePair(cmin, vmin);
+    }
 }

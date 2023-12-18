@@ -6,7 +6,6 @@ import ia.framework.jeux.Game;
 import ia.framework.jeux.GameState;
 import ia.framework.jeux.Player;
 
-import static ia.framework.jeux.Player.PLAYER1;
 
 public class MiniMaxAlphaBeta extends Player {
 
@@ -16,7 +15,7 @@ public class MiniMaxAlphaBeta extends Player {
     /**
      * Represente un joueur
      *
-     * @param g          l'instance du jeux
+     * @param g          l'instance des jeux
      * @param player_one si joueur 1
      */
     public MiniMaxAlphaBeta(Game g, boolean player_one) {
@@ -36,61 +35,61 @@ public class MiniMaxAlphaBeta extends Player {
         if (this.game.endOfGame(state)) {
             return new ActionValuePair(null, state.getGameValue());
         }
-        int V_max = Integer.MIN_VALUE;
-        Action C_max = null;
+        int vmax = Integer.MIN_VALUE;
+        Action cmax = null;
 
         for (Action action : this.game.getActions(state)) {
             GameState S_suivant = (GameState) this.game.doAction(state, action);
             ActionValuePair v = MinValeur(S_suivant, alpha, beta);
-            if (v.getValue() > V_max) {
-                V_max = (int) v.getValue();
-                C_max = action;
+            if (v.getValue() > vmax) {
+                vmax = (int) v.getValue();
+                cmax = action;
             }
 
-            // *16      si V_max > alpha
-            if (V_max > alpha) {
-                // *17        alpha = V_max
-                alpha = V_max;
+            // *16      si vmax > alpha
+            if (vmax > alpha) {
+                // *17        alpha = vmax
+                alpha = vmax;
             }
 
-            // *18    si V_max >= beta
-            if (V_max >= beta) {
-                // *19      retourner (V_max, C_max)
-                return new ActionValuePair(C_max, V_max);
+            // *18    si vmax >= beta
+            if (vmax >= beta) {
+                // *19      retourner (vmax, cmax)
+                return new ActionValuePair(cmax, vmax);
             }
         }
-        // 20  retourner (V_max, C_max)
-        return new ActionValuePair(C_max, V_max);
+        // 20  retourner (vmax, cmax)
+        return new ActionValuePair(cmax, vmax);
     }
 
     private ActionValuePair MinValeur(GameState state, int alpha, int beta) {
         if (this.game.endOfGame(state)) {
             return new ActionValuePair(null, state.getGameValue());
         }
-        int V_min = Integer.MAX_VALUE;
-        Action C_min = null;
+        int vmin = Integer.MAX_VALUE;
+        Action cmin = null;
 
         for (Action action : this.game.getActions(state)) {
             GameState S_suivant = (GameState) this.game.doAction(state, action);
             ActionValuePair v = MaxValeur(S_suivant, alpha, beta);
-            if (v.getValue() < V_min) {
-                V_min = (int) v.getValue();
-                C_min = action;
+            if (v.getValue() < vmin) {
+                vmin = (int) v.getValue();
+                cmin = action;
             }
 
-            // *31      si V_min < beta
-            if (V_min < beta) {
-                // *32         beta = V_min
-                beta = V_min;
+            // *31      si vmin < beta
+            if (vmin < beta) {
+                // *32         beta = vmin
+                beta = vmin;
             }
 
-            // *33    si V_min <= alpha
-            if (V_min <= alpha) {
-                // *34      retourner (V_min, C_min)
-                return new ActionValuePair(C_min, V_min);
+            // *33    si vmin <= alpha
+            if (vmin <= alpha) {
+                // *34      retourner (vmin, cmin)
+                return new ActionValuePair(cmin, vmin);
             }
         }
-        // 26  retourner (V_min, C_min)
-        return new ActionValuePair(C_min, V_min);
+        // 26  retourner (vmin, cmin)
+        return new ActionValuePair(cmin, vmin);
     }
 }

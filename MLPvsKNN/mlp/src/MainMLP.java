@@ -31,7 +31,7 @@ public class MainMLP {
         // TODO
         double [][] trainingInputs =  listeImage.getMLPFormatedInputs();
         double [][] trainingOutputs = listeImage.getMLPFormatedOutputs();
-        
+
         // Entraînement
         int maxEpochs = 1000000; // Nombre maximal de passages des exemples
         double targetError = 0.01; // Erreur cible
@@ -56,7 +56,6 @@ public class MainMLP {
                     break;
                 }
             }
-            //  System.out.println(errorsForExemple.values());
             if (allErrorsAreUnderTarget) {
                 System.out.println("Target error reached at epoch: " + epoch);
                 break;
@@ -92,12 +91,10 @@ public class MainMLP {
 
         /*
         // Tester sur d'autres exemples
-        System.out.println("Testing on additional examples:");
         double[] testInputs = // TODO
         for (int i = 0; i < testInputs.length; i++) {
             double input = testInputs[i];
             double predictedOutput = mlp.execute(input);
-            System.out.println'("Input: " + Double.toString(input) + ", Predicted Output: " + Double.toString(predictedOutput));
         }*
 
          */
