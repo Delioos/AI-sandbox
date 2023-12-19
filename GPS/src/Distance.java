@@ -27,7 +27,6 @@ public class Distance {
                         Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
         double c = 2 * Math.atan2(Math.sqrt(a1), Math.sqrt(1 - a1));
         double d = R * c / 1000;
-        System.out.println("Distance between " + a.getNom() + " and " + b.getNom() + " : " + d);
         return d;
     }
 
@@ -42,7 +41,6 @@ public class Distance {
         // On calcule le temps de trajet
         double time = distance / speed;
 
-        System.out.println("Time between " + a.getNom() + " and " + b.getNom() + " : " + time);
         return time;
 
     }
@@ -71,7 +69,6 @@ public class Distance {
         else
             speed = min(speedA, speedB);
 
-        System.out.println("Speed between " + a.getNom() + " and " + b.getNom() + " : " + speed);
         return speed;
     }
 

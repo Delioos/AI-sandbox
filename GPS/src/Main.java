@@ -62,8 +62,14 @@ public class Main {
         distance.timeBetween(nancy, random);
         distance.timeBetween(nancy, random2);
 
+        // On creer notre graphe
+        Graph graphe = new Graph(distance, listeCommunesArrayList);
 
-
+        // On calcule le chemin le plus rapide entre deux communes
+        System.out.println(graphe.fastestPath(nancy, metz));
+        System.out.println(graphe.fastestPath(nancy, paris));
+        System.out.println(graphe.fastestPath(nancy, random));
+        System.out.println(graphe.fastestPath(nancy, random2));
 
     }
 }
