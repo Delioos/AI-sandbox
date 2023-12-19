@@ -4,7 +4,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -28,14 +30,40 @@ public class Main {
             oos.writeObject(communes);
             oos.close();
         }
-        System.out.println(Arrays.toString(communes.getListeCommunes()));
+        System.out.println("chargement des communes terminé");
+        Commune[] listeCommunes = communes.getListeCommunes();
 
-        Distance distance = new Distance();
+        // Decoupage des communes par population
+        Commune[] top50 = new Commune[50];
+        Commune[] top100 = new Commune[50];
+        Commune[] other = new Commune[listeCommunes.length - 100];
+        // Trier la liste de communes par population
 
-        // On prends 2 communes au hasard
-        Commune commune1 = communes.getListeCommunes()[(int) (Math.random() * communes.getListeCommunes().length)];
-        Commune commune2 = communes.getListeCommunes()[(int) (Math.random() * communes.getListeCommunes().length)];
+        ArrayList<Commune> listeCommunesArrayList = new ArrayList<Commune>(Arrays.asList(listeCommunes));
+        // Remove null values
+        listeCommunesArrayList.removeAll(Arrays.asList(null, ""));
+        listeCommunesArrayList.sort(Comparator.comparingInt(Commune::getPopulation).reversed());
 
-        // On regarde le type de route
+        top50 = listeCommunesArrayList.subList(0, 50).toArray(new Commune[50]);
+        top100 = listeCommunesArrayList.subList(50, 100).toArray(new Commune[50]);
+        other = listeCommunesArrayList.subList(100, listeCommunesArrayList.size()).toArray(new Commune[listeCommunesArrayList.size() - 100]);
+
+        // Calcul de la distance entre 2 communes
+        Distance distance = new Distance(top50, top100);
+
+        // On calcule le temps de trajet
+        Commune metz = top50[30];
+        Commune nancy = top50[40];
+        Commune paris = top50[0];
+        Commune random = other[0];
+        Commune random2 = top100[0];
+        distance.timeBetween(nancy, metz);
+        distance.timeBetween(nancy, paris);
+        distance.timeBetween(nancy, random);
+        distance.timeBetween(nancy, random2);
+
+
+
+
     }
 }

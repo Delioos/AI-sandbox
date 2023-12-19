@@ -187,8 +187,8 @@ public class Communes implements java.io.Serializable {
 
     /**
      * méthode qui retourne une liste avec comme premier élément les 50 communes les plus peuplées, puis les 50 suivantes, et toutes les autres en dernier objet
+     * // methode inutile mais je peux pas me permettre de changer car j ai serialisé 4h de requetes ...
      */
-
     public Commune[] getListeCommunesParPopulation() {
         // Trier la liste de communes par population
         Arrays.sort(listeCommunes, Comparator.comparingInt(Commune::getPopulation));
