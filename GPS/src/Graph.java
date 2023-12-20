@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 public class Graph {
     Distance distance;
@@ -24,36 +26,24 @@ public class Graph {
      * @return path : duree + chemin ville par ville le plus rapide entre a et b
      */
     public String fastestPath(Commune a, Commune b) {
-        // Creation de l heuristique
+        // Creation of l heuristique
         Commune currentNode = a;
 
         StringBuilder path = new StringBuilder();
         double totalDistance = 0;
         double totalDuration = 0;
 
-        ArrayList<Commune> frontier = new ArrayList<Commune>();
-        ArrayList<Commune> explored = new ArrayList<Commune>();
+        PriorityQueue<Commune> frontier = new PriorityQueue<>(Comparator.comparingDouble(commune -> distance.timeBetween(a, commune) + distance.kmBetween(commune, b)));
+        ArrayList<Commune> explored = new ArrayList<>();
 
         frontier.add(a);
 
         while (!frontier.isEmpty() && !(currentNode == b)) {
-            // on cherche le noeud avec le plus petit cout
-            int index = 0;
-            currentNode = frontier.get(index);
-            double heuristique = distance.kmBetween(currentNode, b);
-            double cout = distance.timeBetween(a, currentNode);
-            for (Commune commune : frontier) {
-                if (distance.timeBetween(a, commune) + heuristique < cout + heuristique) {
-                    currentNode = commune;
-                    cout = distance.timeBetween(a, commune);
-                    index = frontier.indexOf(commune);
-                }
-            }
+            currentNode = frontier.poll();
 
             totalDistance += distance.kmBetween(a, currentNode);
             totalDuration += distance.timeBetween(a, currentNode);
             path.append(currentNode.getNom() + " -> ");
-            currentNode = frontier.remove(index);
             explored.add(currentNode);
 
             // on ajoute les voisins du noeud courant dans la frontiere
@@ -63,13 +53,13 @@ public class Graph {
                 }
             }
         }
-        path.append(b.getNom());
-        totalDistance += distance.kmBetween(currentNode, b);
-        totalDuration += distance.timeBetween(currentNode, b);
-        path.append("Distance : " + totalDistance + "km");
-        path.append("Duration : " + totalDuration + "h");
+        // retire le dernier " -> "
+        path.delete(path.length() - 4, path.length());
+        path.append("\nDistance : " + totalDistance + " km");
+        path.append("\nDuration : " + totalDuration + " h");
         return path.toString();
     }
+
 
     /**
      * methode qui retourne le chemin le plus court entre deux communes
